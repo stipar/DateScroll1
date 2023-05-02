@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp3.Views.DatePage"
+             xmlns:vm="clr-namespace:MauiApp3.ViewModel"
+             xmlns:model="clr-namespace:MauiApp3.Models"
+             xmlns:converter="clr-namespace:MauiApp3.Converters"
+             Title="DatePage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:DiaSemanaConverter x:Key="diaSemana"/>
+            <converter:FechaConverter x:Key="fecha"/>
+            <converter:SelecccionadoConverter x:Key="seleccionado"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <VerticalStackLayout>
+        <CollectionView x:Name="DateLst" ItemsSource="{Binding DateList}"
+                        ItemsLayout="HorizontalList">
+            <CollectionView.ItemTemplate >
+                <DataTemplate x:DataType="model:DateModel">
+                    <Frame Padding="0"  Margin="0,0,10,0" BorderColor="Transparent"
+                           BackgroundColor="{Binding Seleccionado,Converter={StaticResource seleccionado}}">
+                        <Grid RowDefinitions="40,30" ColumnDefinitions="55">
+                            <Label HorizontalTextAlignment="Center" VerticalTextAlignment="End"
+                                   FontSize="20" FontAttributes="Bold"
+                                   Text="{Binding Fecha,Converter={StaticResource fecha}}"/>
+
+                            <Label Grid.Row="1" HorizontalTextAlignment="Center" VerticalTextAlignment="Start"
+                                   Text="{Binding Fecha,Converter={StaticResource diaSemana}}"/>
+                        </Grid>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer NumberOfTapsRequired="1"
+                                                  Command="{Binding Source={x:Reference DateLst}, Path=BindingContext.SeleccionarFechaCommand}"
+                                                  CommandParameter="{Binding}"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>
